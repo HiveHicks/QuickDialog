@@ -24,11 +24,13 @@
 {
     UITableViewCell *cell = [super getCellForTableView:tableView controller:controller];
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    cell.accessoryType =
-        [_selectSection.selectedIndexes containsObject:[NSNumber numberWithUnsignedInteger:_index]]
-            ? UITableViewCellAccessoryCheckmark
-            : UITableViewCellAccessoryNone;
-    
+
+    if ([_selectSection.selectedIndexes containsObject:[NSNumber numberWithUnsignedInteger:_index]]) {
+        [self setUpCheckmarkForCell:cell];
+    } else {
+        [self removeCheckmarkForCell:cell];
+    }
+
     return cell;
 }
 
@@ -42,10 +44,10 @@
     if (_selectSection.multipleAllowed)
     {
         if ([_selectSection.selectedIndexes containsObject:numberIndex]) {
-            selectedCell.accessoryType = UITableViewCellAccessoryNone;
+            [self removeCheckmarkForCell:selectedCell];
             [_selectSection.selectedIndexes removeObject:numberIndex];
         } else {
-            selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [self setUpCheckmarkForCell:selectedCell];
             [_selectSection.selectedIndexes addObject:numberIndex];
         }
     }
@@ -60,12 +62,12 @@
                                             [NSIndexPath indexPathForRow:[oldCellRowNumber unsignedIntegerValue]
                                                                inSection:indexPath.section]];
                 
-                oldCell.accessoryType = UITableViewCellAccessoryNone;
+                [self removeCheckmarkForCell:oldCell];
                 [_selectSection.selectedIndexes removeObject:oldCellRowNumber];
                 [oldCell setNeedsDisplay];
             }
             
-            selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [self setUpCheckmarkForCell:selectedCell];
             [_selectSection.selectedIndexes addObject:numberIndex];
         }
     }
@@ -75,6 +77,22 @@
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)setUpCheckmarkForCell:(UITableViewCell *)cell
+{
+    if (_selectSection.checkmarkView != nil) {
+        cell.accessoryView = _selectSection.checkmarkView;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryView = nil;
+    }
+}
+
+- (void)removeCheckmarkForCell:(UITableViewCell *)cell
+{
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
 }
 
 @end

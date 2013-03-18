@@ -39,7 +39,13 @@
     UITableViewCell *cell = [super getCellForTableView:tableView controller:controller];
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     NSInteger selectedIndex = _radioElement==nil? _radioSection.selected : _radioElement.selected;
-    cell.accessoryType = selectedIndex == _index ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+
+    if (selectedIndex == _index) {
+        [self setUpCheckmarkForCell:cell];
+    } else {
+        [self removeCheckmarkForCell:cell];
+    }
+
     return cell;
 }
 
@@ -50,11 +56,11 @@
 
     if (_index != selectedIndex) {
         UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:indexPath.section]];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
+        [self removeCheckmarkForCell:oldCell];
         [oldCell setNeedsDisplay];
 
         UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
-        selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+        [self setUpCheckmarkForCell:selectedCell];
     }
 
     if (_radioElement!= nil)
@@ -81,5 +87,20 @@
     }
 }
 
+- (void)setUpCheckmarkForCell:(UITableViewCell *)cell
+{
+    if (_radioSection.checkmarkView != nil) {
+        cell.accessoryView = _radioSection.checkmarkView;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        cell.accessoryView = nil;
+    }
+}
+
+- (void)removeCheckmarkForCell:(UITableViewCell *)cell
+{
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.accessoryView = nil;
+}
 
 @end

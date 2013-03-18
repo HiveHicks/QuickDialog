@@ -17,6 +17,8 @@
 @property (nonatomic, strong)   NSMutableArray  *selectedIndexes;
 @property (nonatomic, readonly) NSArray         *selectedItems;
 
+@property (nonatomic, retain) UIView *checkmarkView;
+
 @property (nonatomic)           BOOL             multipleAllowed;
 
 @property(nonatomic, copy) void (^onSelected)(void);
