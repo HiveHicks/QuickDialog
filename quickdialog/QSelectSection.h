@@ -8,6 +8,9 @@
 
 #import "QSection.h"
 
+@protocol QSelectSectionDelegate;
+
+
 @interface QSelectSection : QSection
 {
     NSMutableArray *_items;
@@ -18,6 +21,8 @@
 @property (nonatomic, readonly) NSArray         *selectedItems;
 
 @property (nonatomic, retain) UIView *checkmarkView;
+
+@property (nonatomic, assign) id<QSelectSectionDelegate> delegate;
 
 @property (nonatomic)           BOOL             multipleAllowed;
 
@@ -34,5 +39,13 @@
 - (void)insertOption:(NSString *)option atIndex:(NSUInteger)index;
 
 - (void)createElements;
+
+@end
+
+
+@protocol QSelectSectionDelegate <NSObject>
+
+@optional
+- (UIImage *)imageForItem:(id)item atIndex:(NSUInteger)index inSection:(QSelectSection *)section;
 
 @end
