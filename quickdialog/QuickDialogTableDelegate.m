@@ -57,10 +57,16 @@
 
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     QSection *section = [_tableView.root getSectionForIndex:indexPath.section];
-    QElement * element = [section.elements objectAtIndex:(NSUInteger) indexPath.row];
-    return [element getRowHeightForTableView:(QuickDialogTableView *) tableView];
+    QElement *element = [section.elements objectAtIndex:(NSUInteger)indexPath.row];
+
+    if ([_tableView.styleProvider respondsToSelector:@selector(heightForCellForElement:atIndexPath:)]) {
+        return [_tableView.styleProvider heightForCellForElement:element atIndexPath:indexPath];
+    } else {
+        return [element getRowHeightForTableView:(QuickDialogTableView *) tableView];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)index {

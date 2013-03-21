@@ -20,6 +20,8 @@
 
 @optional
 
+- (CGFloat)heightForCellForElement:(QElement *)element atIndexPath:(NSIndexPath *)indexPath;
+
 -(void) sectionHeaderWillAppearForSection:(QSection *)section atIndex:(NSInteger)indexPath;
 -(void) sectionFooterWillAppearForSection:(QSection *)section atIndex:(NSInteger)indexPath;
 
